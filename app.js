@@ -60,7 +60,7 @@ createApp({
         const trustFactors = [
             '10,000+ Root Canal Treatments Successfully Completed',
             '1000+ Dental Implants Placed',
-            'One of the oldest dental clinics in Vikhroli',
+            'One of the oldest dental clinics',
             'Equipped with modern and advanced dental technology',
             'Pioneer of digital dentistry',
             'State-of-the-art dental clinic',
@@ -79,7 +79,7 @@ createApp({
 
         const reviews = ref([
             { author_name: 'Priya Sharma', profile_photo_url: 'https://ui-avatars.com/api/?name=Priya+Sharma&background=00A896&color=fff', rating: 5, text: 'The best dental experience I have ever had. Dr. Nitin was extremely gentle during my root canal treatment. Absolutely painless and the clinic is spotlessly clean!', relative_time_description: '2 weeks ago' },
-            { author_name: 'Rahul Mehta', profile_photo_url: 'https://ui-avatars.com/api/?name=Rahul+Mehta&background=0B132B&color=fff', rating: 5, text: 'Got my dental implants done here. The team is highly professional and uses the latest technology. Highly recommended for anyone in Vikhroli!', relative_time_description: '1 month ago' },
+            { author_name: 'Rahul Mehta', profile_photo_url: 'https://ui-avatars.com/api/?name=Rahul+Mehta&background=0B132B&color=fff', rating: 5, text: 'Got my dental implants done here. The team is highly professional and uses the latest technology. Highly recommended for anyone !', relative_time_description: '1 month ago' },
             { author_name: 'Sneha Patil', profile_photo_url: 'https://ui-avatars.com/api/?name=Sneha+Patil&background=00A896&color=fff', rating: 5, text: 'Very friendly staff and excellent service. My kids actually enjoy visiting the dentist now. The pediatric care here is outstanding.', relative_time_description: '3 weeks ago' },
             { author_name: 'Amit Desai', profile_photo_url: 'https://ui-avatars.com/api/?name=Amit+Desai&background=0B132B&color=fff', rating: 5, text: 'Had a full mouth rehabilitation done. The results are amazing - I can smile confidently again. Worth every penny!', relative_time_description: '2 months ago' },
             { author_name: 'Neha Gupta', profile_photo_url: 'https://ui-avatars.com/api/?name=Neha+Gupta&background=00A896&color=fff', rating: 5, text: 'The clear aligners treatment was smooth and the results exceeded my expectations. The doctors are very knowledgeable and caring.', relative_time_description: '1 week ago' },
@@ -135,7 +135,7 @@ createApp({
                 alert('Please select a time slot');
                 return;
             }
-            const msg = `Hello Happy Dental Clinic, I would like to book an appointment.\n- Type: ${selectedType.value}\n- Date: ${selectedDate.value}\n- Time Slot: ${selectedTime.value}`;
+            const msg = `Hello Dental Clinic, I would like to book an appointment.\n- Type: ${selectedType.value}\n- Date: ${selectedDate.value}\n- Time Slot: ${selectedTime.value}`;
             const url = `https://wa.me/911234567890?text=${encodeURIComponent(msg)}`;
             window.open(url, '_blank');
             showModal.value = false;
