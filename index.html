@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Dental Clinic Vikhroli | Advanced Dental Care</title>
+    <meta name="description" content="Happy Dental Clinic Vikhroli - 15+ years of trusted dental care. Dental implants, root canal, cosmetic dentistry, clear aligners & more.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#0B132B',
+                        teal: '#00A896',
+                        'soft-mint': '#E0F7F4',
+                        'light-slate': '#F1F5F9',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="styles.css">
+<base target="_blank">
+</head>
+<body class="font-sans text-slate-800 antialiased">
+    <div id="app">
+
+        <!-- Navigation -->
+        <nav :class="['fixed top-0 w-full z-50 transition-all duration-300', navScrolled ? 'bg-white/95 backdrop-blur-md shadow-lg py-3' : 'bg-transparent py-5']">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2 cursor-pointer" @click="scrollToSection('hero')">
+                        <div class="w-10 h-10 bg-teal rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 16H6c-.55 0-1-.45-1-1V6c0-.55.45-1 1-1h12c.55 0 1 .45 1 1v12c0 .55-.45 1-1 1z"/>
+                                <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/>
+                            </svg>
+                        </div>
+                        <span :class="['font-bold text-lg tracking-tight', navScrolled ? 'text-navy' : 'text-white']">Dental Clinic <span class="text-teal">Vikhroli</span></span>
+                    </div>
+
+                    <div class="hidden lg:flex items-center gap-8">
+                        <button v-for="link in ['Home','Services','About','Doctors','Reviews','Contact']" :key="link" 
+                            @click="scrollToSection(link.toLowerCase())"
+                            :class="['text-sm font-medium transition-colors hover:text-teal', navScrolled ? 'text-slate-600' : 'text-white/90']">
+                            {{ link }}
+                        </button>
+                    </div>
+
+                    <div class="hidden lg:flex items-center gap-4">
+                        <a href="tel:+919975780529" :class="['flex items-center gap-2 text-sm font-semibold', navScrolled ? 'text-navy' : 'text-white']">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                            +91 1234567890
+                        </a>
+                        <button @click="showModal = true" class="bg-teal hover:bg-teal/90 text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-lg shadow-teal/25">
+                            Book Appointment
+                        </button>
+                    </div>
+
+                    <button @click="isMenuOpen = !isMenuOpen" class="lg:hidden p-2">
+                        <svg :class="['w-6 h-6', navScrolled ? 'text-navy' : 'text-white']" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path v-if="!isMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                            <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div v-if="isMenuOpen" class="lg:hidden mt-4 pb-4 bg-white rounded-2xl shadow-xl p-4 space-y-2">
+                    <button v-for="link in ['Home','Services','About','Doctors','Reviews','Contact']" :key="link"
+                        @click="scrollToSection(link.toLowerCase())"
+                        class="block w-full text-left px-4 py-2 text-slate-700 hover:bg-soft-mint rounded-xl font-medium">
+                        {{ link }}
+                    </button>
+                    <button @click="showModal = true" class="w-full bg-teal text-white py-3 rounded-xl font-semibold mt-2">Book Appointment</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section id="home" class="relative min-h-screen bg-navy overflow-hidden">
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=1600&q=80')] bg-cover bg-center opacity-10"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-navy via-navy/95 to-navy/80"></div>
+
+            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
+                <div class="grid lg:grid-cols-2 gap-12 items-center min-h-[70vh]">
+                    <div class="space-y-8">
+                        <div class="inline-flex items-center gap-2 bg-teal/10 border border-teal/20 rounded-full px-4 py-2">
+                            <span class="w-2 h-2 bg-teal rounded-full animate-pulse"></span>
+                            <span class="text-teal text-sm font-semibold">Vikhroli's Most Trusted Dental Clinic</span>
+                        </div>
+                        <h1 class="text-5xl lg:text-6xl xl:text-7xl font-extrabold text-white leading-tight">
+                            Restore Your <span class="text-teal">Smile</span> with Advanced Implants
+                        </h1>
+                        <p class="text-lg text-slate-300 max-w-xl leading-relaxed">
+                            Experience painless, world-class dental care right here in Vikhroli. From implants to smile makeovers, our expert team uses cutting-edge technology to give you the confidence you deserve.
+                        </p>
+                        <div class="flex flex-wrap gap-4">
+                            <button @click="showModal = true" class="group bg-teal hover:bg-teal/90 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-2xl shadow-teal/30 flex items-center gap-2">
+                                Book Appointment
+                                <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                            </button>
+                            <a href="tel:+919975780529" class="border-2 border-white/30 hover:border-white text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                                Call Now
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <div class="relative rounded-3xl overflow-hidden shadow-2xl">
+                            <img src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=800&q=80" alt="Dental Consultation" class="w-full h-[500px] object-cover"/>
+                        </div>
+                        <div class="absolute -top-4 -right-4 bg-white rounded-2xl p-4 shadow-xl" style="animation: float 3s ease-in-out infinite;">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-teal/10 rounded-xl flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-teal" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-navy text-sm">Quality Certified</p>
+                                    <p class="text-xs text-slate-500">Painless Treatment</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute -bottom-4 -left-4 bg-white rounded-2xl p-4 shadow-xl" style="animation: float 3s ease-in-out infinite 1s;">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-navy text-sm">400+ Reviews</p>
+                                    <p class="text-xs text-slate-500">Trusted Clinic</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-16 grid grid-cols-3 gap-6 max-w-3xl mx-auto">
+                    <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 text-center">
+                        <p class="text-3xl font-extrabold text-teal">15+</p>
+                        <p class="text-sm text-slate-400 mt-1">Years Experience</p>
+                    </div>
+                    <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 text-center">
+                        <p class="text-3xl font-extrabold text-teal">10k+</p>
+                        <p class="text-sm text-slate-400 mt-1">Happy Smiles</p>
+                    </div>
+                    <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 text-center">
+                        <p class="text-3xl font-extrabold text-teal">4.9</p>
+                        <p class="text-sm text-slate-400 mt-1">Google Rating</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="py-24 bg-light-slate">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <span class="text-teal font-semibold text-sm uppercase tracking-wider">What We Offer</span>
+                    <h2 class="text-4xl lg:text-5xl font-extrabold text-navy mt-3">Premium Dental Solutions</h2>
+                    <p class="text-slate-500 mt-4 max-w-2xl mx-auto">Comprehensive dental care using the latest technology and techniques for optimal oral health.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div v-for="(service, i) in services" :key="i" 
+                        :class="['group p-8 rounded-3xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border', 
+                            service.featured ? 'bg-navy text-white border-navy' : 'bg-white border-slate-100']">
+                        <div v-if="service.featured" class="inline-block bg-teal text-white text-xs font-bold px-3 py-1 rounded-full mb-4">MOST ADVANCED</div>
+                        <div :class="['w-14 h-14 rounded-2xl flex items-center justify-center mb-6', service.featured ? 'bg-teal/20' : 'bg-soft-mint']">
+                            <svg :class="['w-7 h-7', service.featured ? 'text-teal' : 'text-teal']" fill="currentColor" viewBox="0 0 24 24">
+                                <path :d="service.icon"/>
+                            </svg>
+                        </div>
+                        <h3 :class="['text-xl font-bold mb-3', service.featured ? 'text-white' : 'text-navy']">{{ service.title }}</h3>
+                        <p :class="['text-sm leading-relaxed mb-4', service.featured ? 'text-slate-300' : 'text-slate-500']">{{ service.desc }}</p>
+                        <button class="text-teal font-semibold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
+                            Learn More <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Choose Us -->
+        <section id="about" class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div class="space-y-8">
+                        <div>
+                            <span class="text-teal font-semibold text-sm uppercase tracking-wider">Why Choose Us</span>
+                            <h2 class="text-4xl lg:text-5xl font-extrabold text-navy mt-3">Excellence in Every Smile</h2>
+                        </div>
+                        <div class="space-y-6">
+                            <div v-for="(item, i) in whyChoose" :key="i" class="flex gap-5 group">
+                                <div class="w-14 h-14 bg-soft-mint rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:bg-teal group-hover:text-white transition-all">
+                                    <svg class="w-6 h-6 text-teal group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24"><path :d="item.icon"/></svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-bold text-navy">{{ item.title }}</h4>
+                                    <p class="text-slate-500 text-sm mt-1">{{ item.desc }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div class="rounded-3xl overflow-hidden shadow-2xl">
+                            <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=800&q=80" alt="Modern Dental Technology" class="w-full h-[500px] object-cover"/>
+                        </div>
+                        <div class="absolute -bottom-6 -right-6 bg-teal text-white rounded-2xl p-6 shadow-xl max-w-xs">
+                            <div class="flex items-center gap-3 mb-2">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                                <span class="font-bold text-lg">100%</span>
+                            </div>
+                            <p class="font-semibold">Sterilization Guaranteed</p>
+                            <p class="text-sm text-white/80 mt-1">Hospital-grade autoclave sterilization for every instrument</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Story (Dark) -->
+        <section class="py-24 bg-navy">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div class="space-y-8">
+                        <h2 class="text-4xl lg:text-5xl font-extrabold text-white leading-tight">Building Trust, <span class="text-teal">One Smile</span> at a Time</h2>
+                        <p class="text-slate-300 leading-relaxed text-lg">
+                            Since 2009, Happy Dental Clinic Vikhroli has been the cornerstone of dental excellence in Mumbai's eastern suburbs. Our mission is simple: to provide accessible, affordable, and anxiety-free dental care using the most advanced technology available.
+                        </p>
+                        <p class="text-slate-400 leading-relaxed">
+                            We believe everyone deserves a healthy, beautiful smile. Our patient-first approach means we take time to understand your concerns, explain every procedure, and ensure your comfort at every step.
+                        </p>
+                        <div class="flex flex-wrap gap-4">
+                            <div class="bg-white/5 border border-white/10 rounded-2xl px-6 py-4">
+                                <p class="text-2xl font-extrabold text-teal">10,000+</p>
+                                <p class="text-sm text-slate-400">Patients Served</p>
+                            </div>
+                            <div class="bg-white/5 border border-white/10 rounded-2xl px-6 py-4">
+                                <p class="text-2xl font-extrabold text-teal">Vikhroli</p>
+                                <p class="text-sm text-slate-400">Prime Location</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-4">
+                            <div class="rounded-3xl overflow-hidden h-48">
+                                <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&q=80" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500"/>
+                            </div>
+                            <div class="rounded-3xl overflow-hidden h-64">
+                                <img src="https://images.unsplash.com/photo-1571772996211-2f02c9727629?w=400&q=80" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500"/>
+                            </div>
+                        </div>
+                        <div class="space-y-4 pt-8">
+                            <div class="rounded-3xl overflow-hidden h-64">
+                                <img src="https://images.unsplash.com/photo-1598256989800-fe5f95da9787?w=400&q=80" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500"/>
+                            </div>
+                            <div class="rounded-3xl overflow-hidden h-48">
+                                <img src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=400&q=80" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Doctors Section -->
+        <section id="doctors" class="py-24 bg-light-slate">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <span class="text-teal font-semibold text-sm uppercase tracking-wider">Meet Our Experts</span>
+                    <h2 class="text-4xl lg:text-5xl font-extrabold text-navy mt-3">Main Doctors</h2>
+                    <p class="text-slate-500 mt-4 max-w-2xl mx-auto">Led by experienced specialists committed to your dental health and comfort.</p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div v-for="(doc, i) in doctors" :key="i" class="bg-white rounded-3xl shadow-lg overflow-hidden flex flex-col md:flex-row">
+                        <div class="md:w-2/5 bg-gradient-to-br from-navy to-navy/80 p-8 flex items-center justify-center">
+                            <div class="w-32 h-32 rounded-full border-4 border-teal overflow-hidden shadow-xl">
+                                <img :src="doc.image" :alt="doc.name" class="w-full h-full object-cover"/>
+                            </div>
+                        </div>
+                        <div class="md:w-3/5 p-8">
+                            <h3 class="text-2xl font-bold text-navy">{{ doc.name }}</h3>
+                            <p class="text-teal font-semibold text-sm mt-1">{{ doc.title }}</p>
+                            <ul class="mt-4 space-y-2">
+                                <li v-for="(point, j) in doc.points" :key="j" class="flex items-start gap-2 text-sm text-slate-600">
+                                    <svg class="w-4 h-4 text-teal mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                    {{ point }}
+                                </li>
+                            </ul>
+                            <div class="mt-6 flex items-center gap-3">
+                                <button class="bg-teal hover:bg-teal/90 text-white px-6 py-2.5 rounded-xl font-semibold text-sm transition-all">View Profile</button>
+                                <a href="tel:+919975780529" class="w-10 h-10 bg-soft-mint rounded-xl flex items-center justify-center text-teal hover:bg-teal hover:text-white transition-all">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                                </a>
+                                <button @click="showModal = true" class="w-10 h-10 bg-soft-mint rounded-xl flex items-center justify-center text-teal hover:bg-teal hover:text-white transition-all">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 9c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trust Factors -->
+        <section class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl lg:text-5xl font-extrabold text-navy">Why Patients Trust Us</h2>
+                    <p class="text-slate-500 mt-4">Numbers and standards that speak for themselves</p>
+                </div>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div v-for="(factor, i) in trustFactors" :key="i" class="group bg-light-slate hover:bg-navy p-6 rounded-2xl transition-all duration-300 hover:-translate-y-1">
+                        <div class="w-10 h-10 bg-teal/10 group-hover:bg-teal/20 rounded-xl flex items-center justify-center mb-4">
+                            <svg class="w-5 h-5 text-teal" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                        </div>
+                        <p class="text-sm font-semibold text-navy group-hover:text-white transition-colors leading-snug">{{ factor }}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Consultants -->
+        <section class="py-24 bg-light-slate">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <span class="inline-block bg-teal/10 text-teal text-xs font-bold px-3 py-1 rounded-full mb-4">BY PRIOR APPOINTMENT ONLY</span>
+                    <h2 class="text-4xl lg:text-5xl font-extrabold text-navy">Consultants</h2>
+                    <p class="text-slate-500 mt-4">Specialist consultants available across all dental disciplines</p>
+                </div>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div v-for="(c, i) in consultants" :key="i" class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-lg transition-all">
+                        <h4 class="text-lg font-bold text-navy mb-3 flex items-center gap-2">
+                            <span class="w-8 h-8 bg-teal/10 rounded-lg flex items-center justify-center text-teal text-sm">{{ i + 1 }}</span>
+                            {{ c.dept }}
+                        </h4>
+                        <ul class="space-y-2">
+                            <li v-for="(doc, j) in c.doctors" :key="j" class="flex items-center gap-2 text-sm text-slate-600">
+                                <svg class="w-4 h-4 text-teal" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                                {{ doc }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section id="reviews" class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-16 gap-6">
+                    <div>
+                        <span class="text-teal font-semibold text-sm uppercase tracking-wider">Testimonials</span>
+                        <h2 class="text-4xl lg:text-5xl font-extrabold text-navy mt-3">What Our Patients Say</h2>
+                    </div>
+                    <div class="bg-navy rounded-2xl p-6 text-white flex items-center gap-4">
+                        <div class="text-center">
+                            <p class="text-3xl font-extrabold text-teal">4.9</p>
+                            <div class="flex gap-0.5 mt-1">
+                                <svg v-for="s in 5" :key="s" class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            </div>
+                        </div>
+                        <div class="border-l border-white/20 pl-4">
+                            <p class="font-bold">Google Rating</p>
+                            <p class="text-sm text-slate-300">Based on 400+ reviews</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div v-for="(review, i) in reviews" :key="i" class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm hover:shadow-lg transition-all">
+                        <div class="flex items-center gap-1 mb-4">
+                            <svg v-for="s in 5" :key="s" class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        </div>
+                        <svg class="w-8 h-8 text-teal/20 mb-3" fill="currentColor" viewBox="0 0 24 24"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/></svg>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-6">"{{ review.text }}"</p>
+                        <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+                            <div class="flex items-center gap-3">
+                                <img :src="review.profile_photo_url" class="w-10 h-10 rounded-full"/>
+                                <div>
+                                    <p class="font-semibold text-navy text-sm">{{ review.author_name }}</p>
+                                    <p class="text-xs text-slate-400">{{ review.relative_time_description }}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-1 text-xs text-teal font-semibold bg-teal/5 px-2 py-1 rounded-full">
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                                Verified
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section class="py-24 bg-light-slate">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <span class="text-teal font-semibold text-sm uppercase tracking-wider">Virtual Tour</span>
+                    <h2 class="text-4xl lg:text-5xl font-extrabold text-navy mt-3">Our Clinic at a Glance</h2>
+                    <p class="text-slate-500 mt-4 max-w-2xl mx-auto">Take a virtual tour of our state-of-the-art facility designed for your comfort and safety.</p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px]">
+                    <div @click="openLightbox(0)" class="col-span-2 row-span-2 rounded-3xl overflow-hidden cursor-pointer group relative">
+                        <img :src="galleryImages[0].src" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                            <p class="text-white font-bold">{{ galleryImages[0].category }}</p>
+                        </div>
+                    </div>
+                    <div @click="openLightbox(1)" class="rounded-3xl overflow-hidden cursor-pointer group relative">
+                        <img :src="galleryImages[1].src" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                            <p class="text-white font-bold text-sm">{{ galleryImages[1].category }}</p>
+                        </div>
+                    </div>
+                    <div @click="openLightbox(2)" class="rounded-3xl overflow-hidden cursor-pointer group relative">
+                        <img :src="galleryImages[2].src" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                            <p class="text-white font-bold text-sm">{{ galleryImages[2].category }}</p>
+                        </div>
+                    </div>
+                    <div @click="openLightbox(3)" class="rounded-3xl overflow-hidden cursor-pointer group relative">
+                        <img :src="galleryImages[3].src" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                            <p class="text-white font-bold text-sm">{{ galleryImages[3].category }}</p>
+                        </div>
+                    </div>
+                    <div @click="openLightbox(4)" class="rounded-3xl overflow-hidden cursor-pointer group relative">
+                        <img :src="galleryImages[4].src" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                            <p class="text-white font-bold text-sm">{{ galleryImages[4].category }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lightbox Modal -->
+        <div v-if="showLightbox" class="fixed inset-0 z-[60] bg-navy/95 flex items-center justify-center p-4" @click.self="closeLightbox">
+            <button @click="closeLightbox" class="absolute top-6 right-6 text-white/70 hover:text-white">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <button @click="prevImage" class="absolute left-6 text-white/70 hover:text-white">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <button @click="nextImage" class="absolute right-6 text-white/70 hover:text-white">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+            <div class="max-w-4xl w-full">
+                <img :src="galleryImages[lightboxIndex].src" class="w-full max-h-[80vh] object-contain rounded-2xl"/>
+                <p class="text-white text-center mt-4 font-semibold">{{ galleryImages[lightboxIndex].category }}</p>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-2 gap-16">
+                    <div class="space-y-10">
+                        <div>
+                            <span class="text-teal font-semibold text-sm uppercase tracking-wider">Get in Touch</span>
+                            <h2 class="text-4xl lg:text-5xl font-extrabold text-navy mt-3">Contact & Location</h2>
+                        </div>
+                        <div class="space-y-6">
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-soft-mint rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-teal" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-navy">Our Location</h4>
+                                    <p class="text-slate-500 text-sm mt-1">Shop No. 3, Ground Floor, Laxmi Park,<br>Near Vikhroli Station, Mumbai - 400083</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-soft-mint rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-teal" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-navy">Main Number</h4>
+                                    <p class="text-slate-500 text-sm mt-1">+91 123456789</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-soft-mint rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-teal" fill="currentColor" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-navy">Clinic Timings</h4>
+                                    <p class="text-slate-500 text-sm mt-1">Mon - Sat: 9:00 AM - 9:00 PM<br>Sunday: 10:00 AM - 2:00 PM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="rounded-3xl overflow-hidden shadow-xl h-[400px] bg-slate-100">
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3770.1234567890123!2d72.92!3d19.11!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTnCsDA2JzM2LjAiTiA3MsKwNTUnMTIuMCJF!5e0!3m2!1sen!2sin!4v1234567890"
+                                width="100%" 
+                                height="100%" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                        <a href="https://maps.google.com/?q=Happy+Dental+Clinic+Vikhroli" target="_blank" class="inline-flex items-center gap-2 bg-navy hover:bg-navy/90 text-white px-6 py-3 rounded-xl font-semibold transition-all">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            Open in Google Maps
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-navy text-white py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid md:grid-cols-3 gap-12 mb-12">
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-10 h-10 bg-teal rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 16H6c-.55 0-1-.45-1-1V6c0-.55.45-1 1-1h12c.55 0 1 .45 1 1v12c0 .55-.45 1-1 1z"/></svg>
+                            </div>
+                            <span class="font-bold text-lg">Happy Dental Clinic <span class="text-teal">Vikhroli</span></span>
+                        </div>
+                        <p class="text-slate-400 text-sm leading-relaxed">Restoring smiles and building trust since 2009. Your family's dental health is our top priority.</p>
+                        <div class="flex gap-3">
+                            <div class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center hover:bg-teal transition-colors cursor-pointer">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+                            </div>
+                            <div class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center hover:bg-teal transition-colors cursor-pointer">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 01-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 017.8 2m-.2 2A3.6 3.6 0 004 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 003.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 110 2.5 1.25 1.25 0 010-2.5M12 7a5 5 0 110 10 5 5 0 010-10m0 2a3 3 0 100 6 3 3 0 000-6z"/></svg>
+                            </div>
+                            <div class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center hover:bg-teal transition-colors cursor-pointer">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14m-.5 15.5v-5.3a3.26 3.26 0 00-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79M6.88 8.56a1.68 1.68 0 001.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 00-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-4">Quick Links</h4>
+                        <ul class="space-y-2">
+                            <li><button @click="scrollToSection('home')" class="text-slate-400 hover:text-teal transition-colors text-sm">Home</button></li>
+                            <li><button @click="scrollToSection('services')" class="text-slate-400 hover:text-teal transition-colors text-sm">Services</button></li>
+                            <li><button @click="scrollToSection('about')" class="text-slate-400 hover:text-teal transition-colors text-sm">About Us</button></li>
+                            <li><button @click="scrollToSection('doctors')" class="text-slate-400 hover:text-teal transition-colors text-sm">Our Doctors</button></li>
+                            <li><button @click="scrollToSection('reviews')" class="text-slate-400 hover:text-teal transition-colors text-sm">Reviews</button></li>
+                            <li><button @click="scrollToSection('contact')" class="text-slate-400 hover:text-teal transition-colors text-sm">Contact</button></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-4">Contact Info</h4>
+                        <ul class="space-y-3 text-sm text-slate-400">
+                            <li class="flex items-start gap-2">
+                                <svg class="w-4 h-4 text-teal mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                Shop No. 3, Laxmi Park, Vikhroli, Mumbai - 400083
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-teal flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                                +91 1234567890
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-teal flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                                Mon-Sat: 9AM - 9PM | Sun: 10AM - 2PM
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <p class="text-slate-500 text-sm">&copy; 2026 Happy Dental Clinic Vikhroli. All rights reserved.</p>
+                    <div class="flex gap-6 text-sm text-slate-500">
+                        <a href="#" class="hover:text-teal transition-colors">Privacy Policy</a>
+                        <a href="#" class="hover:text-teal transition-colors">Terms of Service</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Booking Modal -->
+        <div v-if="showModal" class="fixed inset-0 z-[70] flex items-center justify-center p-4">
+            <div class="absolute inset-0 bg-navy/60 backdrop-blur-sm" @click="showModal = false"></div>
+            <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden relative z-10 max-h-[90vh] overflow-y-auto">
+                <div class="bg-navy px-8 py-6 flex items-center justify-between sticky top-0">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">Book Appointment</h2>
+                        <p class="text-slate-400 text-sm mt-1">Select your preferred slot for consultation</p>
+                    </div>
+                    <button @click="showModal = false" class="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center text-white transition-all">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+
+                <div class="p-8 space-y-8">
+                    <!-- Consultation Type -->
+                    <div>
+                        <label class="text-sm font-semibold text-navy mb-3 block">Consultation Type</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button @click="selectedType = 'In-Clinic'" 
+                                :class="['flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 font-semibold transition-all', selectedType === 'In-Clinic' ? 'border-teal bg-teal/5 text-teal' : 'border-slate-200 text-slate-500 hover:border-teal/30']">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                In-Clinic
+                            </button>
+                            <button @click="selectedType = 'Video Consult'" 
+                                :class="['flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 font-semibold transition-all relative', selectedType === 'Video Consult' ? 'border-teal bg-teal/5 text-teal' : 'border-slate-200 text-slate-500 hover:border-teal/30']">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                                Video Consult
+                                <span class="absolute -top-2 -right-2 bg-teal text-white text-[10px] font-bold px-2 py-0.5 rounded-full">Saves 20% time</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Date Picker -->
+                    <div>
+                        <label class="text-sm font-semibold text-navy mb-3 block">Select Date</label>
+                        <div class="flex gap-2 overflow-x-auto pb-2">
+                            <button v-for="(d, i) in weekDates" :key="i" @click="selectedDate = d.full"
+                                :class="['flex-shrink-0 w-16 py-3 rounded-2xl text-center transition-all', selectedDate === d.full ? 'bg-teal text-white shadow-lg shadow-teal/25' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-100']">
+                                <p class="text-xs font-medium uppercase">{{ d.day }}</p>
+                                <p class="text-xl font-bold mt-1">{{ d.date }}</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Time Slots -->
+                    <div class="space-y-6">
+                        <div v-for="(slots, period) in timeSlots" :key="period">
+                            <label class="text-sm font-semibold text-navy mb-3 block flex items-center gap-2">
+                                <svg v-if="period === 'Morning'" class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/></svg>
+                                <svg v-else-if="period === 'Afternoon'" class="w-4 h-4 text-orange-500" fill="currentColor" viewBox="0 0 24 24"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/></svg>
+                                <svg v-else class="w-4 h-4 text-indigo-500" fill="currentColor" viewBox="0 0 24 24"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/></svg>
+                                {{ period }}
+                            </label>
+                            <div class="grid grid-cols-4 gap-2">
+                                <button v-for="slot in slots" :key="slot" @click="unavailableSlots.includes(slot) ? null : selectedTime = slot"
+                                    :class="['py-2.5 px-3 rounded-xl text-sm font-medium transition-all', 
+                                        unavailableSlots.includes(slot) ? 'border border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed' : 
+                                        selectedTime === slot ? 'border-2 border-teal bg-teal text-white' : 'border border-slate-200 text-slate-600 hover:border-teal hover:text-teal']">
+                                    {{ slot }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-100">
+                        <button @click="confirmAppointment" class="w-full bg-teal hover:bg-teal/90 text-white py-4 rounded-2xl font-bold text-lg transition-all shadow-lg shadow-teal/25 flex items-center justify-center gap-2 group">
+                            Confirm Appointment
+                            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        </button>
+                        <p class="text-center text-xs text-slate-400 mt-3 font-medium tracking-wide uppercase">No Payment Required Now</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
