@@ -136,7 +136,7 @@ createApp({
                 return;
             }
             const msg = `Hello Happy Dental Clinic, I would like to book an appointment.\n- Type: ${selectedType.value}\n- Date: ${selectedDate.value}\n- Time Slot: ${selectedTime.value}`;
-            const url = `https://wa.me/919975780529?text=${encodeURIComponent(msg)}`;
+            const url = `https://wa.me/911234567890?text=${encodeURIComponent(msg)}`;
             window.open(url, '_blank');
             showModal.value = false;
         };
